@@ -81,6 +81,17 @@ def test_skill_view_default_is_read_only_and_does_not_activate():
     assert "Read-only skill viewing" in extras["setup_note"]
 
 
+def test_model_facing_skill_view_disables_activation_and_preprocessing():
+    from unittest.mock import patch
+    from tools.skills_tool import _skill_view_with_bump
+
+    with patch("tools.skills_tool.skill_view", return_value='{"success": false}') as view:
+        _skill_view_with_bump({"name": "safe-read"}, task_id="test-task")
+
+    assert view.call_args.kwargs["activate"] is False
+    assert view.call_args.kwargs["preprocess"] is False
+
+
 def test_plugin_toolsets_require_explicit_selection():
     from hermes_cli.tools_config import _enabled_plugin_toolsets
 

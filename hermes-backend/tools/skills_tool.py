@@ -747,7 +747,8 @@ def _skill_view_with_bump(args, **kw):
     # possibly-pruned transcript copy (#95976). No dedup in the fork; None also keeps its views
     # out of the parent's bucket.
     dedup_task_id = None if is_background_review() else task_id
-    result = skill_view(name, file_path=args.get("file_path"), task_id=task_id, activate=False)
+    result = skill_view(name, file_path=args.get("file_path"), task_id=task_id,
+                        preprocess=False, activate=False)
     with suppress(Exception):
         parsed = json.loads(result)
         if isinstance(parsed, dict) and parsed.get("success"):
